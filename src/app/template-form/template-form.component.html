@@ -1,14 +1,22 @@
-<form action="" #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value)">
-
+<!-- novalidate 取消HTML的校验， 这里面的required，是angular2里的指令 -->
+<form action="" #myForm="ngForm" (ngSubmit)="onSubmit(myForm.value, myForm.valid)" novalidate>
   <div>
-    用户名：<input type="text" ngModel name="username">
+    用户名：<input type="text" ngModel required minlength="4" name="username" (input)="onMobileInput(myForm)">
+  </div>
+  <div [hidden]="usernameUntouched || usernameValid">
+    <div [hidden]="!myForm.form.hasError('required','username')">
+      用户名是必填项
+    </div>
+    <div [hidden]="!myForm.form.hasError('minlength','username')">
+      用户名最小长度是4
+    </div>
   </div>
   <div>
-    手机号：<input type="number" ngModel name="mobile">
+    手机号：<input type="number" mobile ngModel name="mobile">
   </div>
-  <div ngModelGroup="passwordGroup">
+  <div ngModelGroup="passwordGroup" equal>
     <div>
-      密码：<input type="password" ngModel name="password">
+      密码：<input type="password" minlength="6" ngModel name="password">
     </div>
     <div>
       确认密码：<input type="password" ngModel name="pconfirm">

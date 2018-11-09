@@ -1,17 +1,41 @@
 <form action="" [formGroup]="formModel" (ngSubmit)="onSubmit()">
   <div>
-    用户名：<input type="text" formControlName="username">
+    用户名：<input type="text" [class.hasError]="formModel.get('username').invalid && formModel.get('username').touched" formControlName="username">
+  </div>
+  <!-- untouched, touched 代表是否关注过焦点 -->
+  <div [hidden]="formModel.get('username').valid || formModel.get('username').untouched">
+    <div [hidden]="!formModel.hasError('required','username')">
+      用户名是必填项
+    </div>
+    <div [hidden]="!formModel.hasError('minlength','username')">
+      用户名最小长度是4
+    </div>
   </div>
   <div>
     手机号：<input type="text" formControlName="mobile">
+  </div>
+  <!-- pristine，dirty, 代表值是否变过 -->
+  <div [hidden]="formModel.get('mobile').valid || formModel.get('mobile').pristine">
+    <div [hidden]="!formModel.hasError('mobile','mobile')">
+      手机格式错误
+    </div>
   </div>
   <div formGroupName="passwordGroup">
     <div>
       密码：<input type="password" formControlName="password">
     </div>
+    <div [hidden]="!formModel.hasError('minlength',['passwordGroup','password'])">
+      用户名最小长度是6
+    </div>
     <div>
       确认密码：<input type="password" formControlName="pconfirm">
     </div>
   </div>
+  <div [hidden]="!formModel.hasError('equal','passwordGroup')">
+    {{formModel.getError('equal','passwordGroup')?.descc}}
+  </div>
   <button type="submit">注册</button>
 </form>
+<div>
+  {{formModel.status}}
+</div>
